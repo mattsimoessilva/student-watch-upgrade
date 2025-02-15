@@ -18,16 +18,20 @@ model User {
   studentsAndLectures StudentsAndLectures[]
   professorsAndCourses ProfessorsAndCourses[]
   studentAndClasses StudentsAndClasses[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Course {
   id Int @id @default(autoincrement())
   name String @unique
   description String @unique
-  coordinator User @relation(fields: [coordinatorId], references: [id])
-  coordinatorId Int
+  coordinator User? @relation(fields: [coordinatorId], references: [id])
+  coordinatorId Int?
   classes Class[]
   professorsAndCourse ProfessorsAndCourses[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Shift {
@@ -36,6 +40,8 @@ model Shift {
   startTime String
   endTime String
   lectures Lecture[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Class {
@@ -47,6 +53,8 @@ model Class {
   courseId Int
   lectures Lecture[]
   studentsAndClasses StudentsAndClasses[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Lecture {
@@ -57,12 +65,16 @@ model Lecture {
   classId Int
   weekDays LecturesAndWeekDays[]
   students StudentsAndLectures[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model WeekDay {
   id Int @id @default(autoincrement())
   name String @unique
   lectures LecturesAndWeekDays[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model LecturesAndWeekDays {
@@ -70,6 +82,8 @@ model LecturesAndWeekDays {
   lectureId Int
   weekDay WeekDay @relation(fields: [weekDayId], references: [id])
   weekDayId Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@id([lectureId, weekDayId])
 }
@@ -79,7 +93,8 @@ model StudentsAndLectures {
   studentId Int
   lecture Lecture @relation(fields: [lectureId], references: [id])
   lectureId Int
-  dateTime DateTime 
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@id([studentId, lectureId])
 }
@@ -89,6 +104,8 @@ model ProfessorsAndCourses {
   professorId Int
   course Course @relation(fields: [courseId], references: [id])
   courseId Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@id([professorId, courseId])
 }
@@ -98,6 +115,8 @@ model StudentsAndClasses {
   studentId Int
   class Class @relation(fields: [classId], references: [id])
   classId Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@id([studentId, classId])
 }
