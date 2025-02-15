@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  registrationNumber String @unique
+  role Role 
+  courses Course[]
+  classes Class[]
+  studentsAndLectures StudentsAndLectures[]
+  professorsAndCourses ProfessorsAndCourses[]
+  studentAndClasses StudentsAndClasses[]
+}
+
+model Course {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String @unique
+  coordinator User @relation(fields: [coordinatorId], references: [id])
+  coordinatorId Int
+  classes Class[]
+  professorsAndCourse ProfessorsAndCourses[]
+}
+
+model Shift {
+  id Int @id @default(autoincrement())
+  name String @unique
+  startTime String
+  endTime String
+  lectures Lecture[]
+}
+
+model Class {
+  id Int @id @default(autoincrement())
+  name String 
+  professor User @relation(fields: [professorId], references: [id])
+  professorId Int
+  course Course @relation(fields: [courseId], references: [id])
+  courseId Int
+  lectures Lecture[]
+  studentsAndClasses StudentsAndClasses[]
+}
+
+model Lecture {
+  id Int @id @default(autoincrement())
+  shift Shift @relation(fields: [shiftId], references: [id])
+  shiftId Int
+  class Class @relation(fields: [classId], references: [id])
+  classId Int
+  weekDays LecturesAndWeekDays[]
+  students StudentsAndLectures[]
+}
+
+model WeekDay {
+  id Int @id @default(autoincrement())
+  name String @unique
+  lectures LecturesAndWeekDays[]
+}
+
+model LecturesAndWeekDays {
+  lecture Lecture @relation(fields: [lectureId], references: [id])
+  lectureId Int
+  weekDay WeekDay @relation(fields: [weekDayId], references: [id])
+  weekDayId Int
+
+  @@id([lectureId, weekDayId])
+}
+
+model StudentsAndLectures {
+  student User @relation(fields: [studentId], references: [id])
+  studentId Int
+  lecture Lecture @relation(fields: [lectureId], references: [id])
+  lectureId Int
+  dateTime DateTime 
+
+  @@id([studentId, lectureId])
+}
+
+model ProfessorsAndCourses {
+  professor User @relation(fields: [professorId], references: [id])
+  professorId Int
+  course Course @relation(fields: [courseId], references: [id])
+  courseId Int
+
+  @@id([professorId, courseId])
+}
+
+model StudentsAndClasses {
+  student User @relation(fields: [studentId], references: [id])
+  studentId Int
+  class Class @relation(fields: [classId], references: [id])
+  classId Int
+
+  @@id([studentId, classId])
+}
+
+enum Role {
+  STUDENT
+  PROFESSOR
+  COORDINATOR
+}
