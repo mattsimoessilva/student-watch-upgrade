@@ -28,6 +28,7 @@ model Course {
   description String @unique
   coordinator User? @relation(fields: [coordinatorId], references: [id])
   coordinatorId Int?
+  numberOfTerms Int?
   classes Class[]
   professorsAndCourse ProfessorsAndCourses[]
   createdAt DateTime? @default(now())
@@ -51,6 +52,7 @@ model Class {
   professorId Int
   course Course @relation(fields: [courseId], references: [id])
   courseId Int
+  term Int?
   lectures Lecture[]
   studentsAndClasses StudentsAndClasses[]
   createdAt DateTime? @default(now())

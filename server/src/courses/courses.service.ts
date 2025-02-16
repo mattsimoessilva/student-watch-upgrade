@@ -6,17 +6,17 @@ import { DatabaseService } from 'src/database/database.service';
 export class CoursesService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(createCourseDto: Prisma.CourseCreateInput) {
+  async createCourse(createCourseDto: Prisma.CourseCreateInput) {
     return this.databaseService.course.create({
       data: createCourseDto,
     });
   }
 
-  async findAll() {
+  async getAllCourses() {
     return this.databaseService.course.findMany()
   }
 
-  async findOne(id: number) {
+  async getCourseById(id: number) {
     return this.databaseService.course.findUnique({
       where: {
         id,
@@ -45,10 +45,10 @@ export class CoursesService {
         let course = await this.databaseService.course.findUnique({
           where: {
             id: element.courseId,
-          },
-        });
+          }
+        })
 
-        courseList.push(course);
+        courseList.push(course)
       }
 
       return courseList
@@ -78,7 +78,7 @@ export class CoursesService {
    
   }
 
-  async update(id: number, updateCourseDto: Prisma.CourseUpdateInput) {
+  async updateCourse(id: number, updateCourseDto: Prisma.CourseUpdateInput) {
     return this.databaseService.course.update({
       where: {
         id,
@@ -87,7 +87,7 @@ export class CoursesService {
     })
   }
 
-  async remove(id: number) {
+  async deleteCourse(id: number) {
     return this.databaseService.course.delete({
       where: {
         id,

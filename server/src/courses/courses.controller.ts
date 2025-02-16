@@ -1,33 +1,42 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Prisma } from '@prisma/client';
+import { ClassesService } from 'src/classes/classes.service';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly classesService: ClassesService
+  ) {}
 
   @Post()
-  create(@Body() createCourseDto: Prisma.CourseCreateInput) {
-    return this.coursesService.create(createCourseDto);
+  createCourse(@Body() createCourseDto: Prisma.CourseCreateInput) {
+    return this.coursesService.createCourse(createCourseDto);
   }
 
   @Get()
-  findAll() {
-    return this.coursesService.findAll();
+  getAllCourses() {
+    return this.coursesService.getAllCourses();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(+id);
+  getCourseById(@Param('id') id: string) {
+    return this.coursesService.getCourseById(+id);
+  }
+
+  @Get(':id/classes')
+  getClassesByCourseId(@Param('id') id: string) {
+    return this.classesService.getClassesByCourseId(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCourseDto: Prisma.CourseUpdateInput) {
-    return this.coursesService.update(+id, updateCourseDto);
+  updateCourse(@Param('id') id: string, @Body() updateCourseDto: Prisma.CourseUpdateInput) {
+    return this.coursesService.updateCourse(+id, updateCourseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.coursesService.remove(+id);
+  deleteCourse(@Param('id') id: string) {
+    return this.coursesService.deleteCourse(+id);
   }
 }
