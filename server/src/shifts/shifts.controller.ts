@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ShiftsService } from './shifts.service';
 import { Prisma } from '@prisma/client';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('shifts')
 export class ShiftsController {

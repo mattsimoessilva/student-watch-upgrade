@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { Prisma } from '@prisma/client';
 import { ClassesService } from 'src/classes/classes.service';
+import { ApiQuery } from '@nestjs/swagger';
+
 
 @Controller('users')
 export class UsersController {
@@ -12,12 +14,18 @@ export class UsersController {
     private readonly classesService: ClassesService,
   ) {}
 
+
   @Post()
   createUser(@Body() createUserDto: Prisma.UserCreateInput) {
     return this.usersService.createUser(createUserDto)
   }
 
   @Get()
+  @ApiQuery({
+    name: "role",
+    required: false,
+    type: undefined
+  })
   getAllUsers(@Query('role') role?: 'STUDENT' | 'PROFESSOR' | 'COORDINATOR') {
     return this.usersService.getAllUsers(role)
   }
